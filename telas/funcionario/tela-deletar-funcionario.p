@@ -1,20 +1,15 @@
 DEF VAR wconfirmaroperacao  AS LOG NO-UNDO.
 
 PROMPT-FOR funcionario.id  COLUMN-LABEL 'Identificador do funcionario' 
-WITH FRAME funcionarioframe CENTERED.
+WITH FRAME inputfuncionarioframe CENTERED.
 FIND funcionario USING funcionario.id EXCLUSIVE-LOCK NO-ERROR.
 
-HIDE FRAME funcionarioframe.
+HIDE FRAME inputfuncionarioframe.
 
 IF AVAILABLE funcionario
 THEN DO:
     
-    FORM 
-        funcionario.nome_completo
-        funcionario.data_nascimento
-        funcionario.sexo
-        funcionario.cpf
-        WITH FRAME formfuncionarioframe WIDTH 120.
+    {includes/funcionario/formulario-delecao.i}
     
     DISP 
         funcionario.id
@@ -22,12 +17,12 @@ THEN DO:
         funcionario.data_nascimento
         funcionario.sexo
         funcionario.cpf
-    WITH 1 COL FRAME funcionarioframe CENTERED TITLE 'Funcionario'. 
+    WITH 1 COL FRAME displayfuncionarioframe CENTERED TITLE 'Funcionario'. 
             
     MESSAGE 'Deseja deletar o funcionario informado?'
     VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE wconfirmaroperacao.
     
-    HIDE FRAME funcionarioframe.
+    HIDE FRAME displayfuncionarioframe.
     
     IF wconfirmaroperacao
     THEN DO:
@@ -41,7 +36,12 @@ THEN DO:
         VIEW-AS ALERT-BOX BUTTONS OK.
         RUN telas/funcionario/tela-escolha-funcionario.p.
     END.
-     
+END.
+ELSE 
+DO:
+    MESSAGE 'Nenhum funcionario disponivel com esse identificador'
+    VIEW-AS ALERT-BOX BUTTONS OK.
+    RUN telas/funcionario/tela-escolha-funcionario.p.
 END.
 
 
