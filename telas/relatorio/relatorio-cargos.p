@@ -8,7 +8,11 @@ FOR EACH cargo NO-LOCK:
     DISP
         cargo.id
         cargo.cargo
+<<<<<<< HEAD
     WITH wqtdecargoslistagem DOWN FRAME displaycargoframe 
+=======
+    WITH wqtdecargoslistagem DOWN FRAME relatoriocargoframe 
+>>>>>>> development/relatorio/cidades
     TITLE 'Lista de cargos' CENTERED.
 END.
 
