@@ -1,7 +1,5 @@
-DEF VAR wvoltarparaomenu AS LOG NO-UNDO.
-
-
-DEF VAR wqtdecargoslistagem AS INT  NO-UNDO INIT 4.
+DEF VAR wvoltarparaomenu    AS LOG          NO-UNDO.
+DEF VAR wqtdecargoslistagem AS INT INIT 4   NO-UNDO.
 
 FOR EACH cargo NO-LOCK:
     
@@ -10,7 +8,7 @@ FOR EACH cargo NO-LOCK:
     DISP
         cargo.id
         cargo.cargo
-    WITH wqtdecargoslistagem DOWN FRAME viewcargoframe 
+    WITH wqtdecargoslistagem DOWN FRAME displaycargoframe 
     TITLE 'Lista de cargos' CENTERED.
 END.
 
