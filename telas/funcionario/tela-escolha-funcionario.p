@@ -1,5 +1,5 @@
 DEF VAR wopcoesdisponiveis AS INT EXTENT 4 INIT [0, 1, 2, 3] NO-UNDO.
-DEF VAR wopcaoescolhida    AS INT FORMAT '9' NO-UNDO.
+DEF VAR wopcaoescolhida    AS INT FORMAT '9'                 NO-UNDO.
 
 FORM SKIP(2)
 '1) Cadastrar funcionario'    AT 30 SKIP (1)
