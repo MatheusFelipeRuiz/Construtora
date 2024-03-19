@@ -1,28 +1,24 @@
 DEF VAR wconfirmaroperacao  AS LOG NO-UNDO.
 
-
-
-
 PROMPT-FOR cidade.id LABEL 'Identificador cidade' WITH  FRAME inputcidadeframe CENTERED.
 FIND cidade USING cidade.id EXCLUSIVE-LOCK NO-ERROR.
-
 
 HIDE FRAME inputcidadeframe.
 
 IF AVAILABLE cidade
 THEN DO:
     
-    {includes/cidade/formulario-cadastro-edicao-cidade.i}
+    {includes/cidade/formulario-delecao.i}
         
     DISP 
         cidade.id
         cidade.cidade
-    WITH FRAME cidadeframe 1 COL CENTERED TITLE 'Cidade'.
+    WITH FRAME displaycidadeframe 1 COL CENTERED TITLE 'Cidade'.
 
     MESSAGE 'Deseja deletar a cidade informada?'
     VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE wconfirmaroperacao.
     
-    HIDE FRAME cidadeframe.
+    HIDE FRAME displaycidadeframe.
     
     IF wconfirmaroperacao
     THEN DO:
@@ -37,12 +33,14 @@ THEN DO:
         RUN telas/cidade/tela-escolha-cidade.p.
     END.
 END.
+ELSE 
+DO:
+    MESSAGE 'Nenhuma cidade encontrada com esse ID'
+    VIEW-AS ALERT-BOX.
+    RUN telas/cidade/tela-escolha-cidade.p. 
+END.
 
-MESSAGE 'Nenhuma cidade encontrada com esse ID'
-VIEW-AS ALERT-BOX.
-RUN telas/cidade/tela-escolha-cidade.p. 
-
-
+ 
 
 
 
