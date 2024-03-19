@@ -1,5 +1,5 @@
-DEF VAR wopcaodisponiveis      AS INT EXTENT 7 INIT [0, 1, 2, 3, 4, 5, 6]   NO-UNDO. 
-DEF VAR wopcaoescolhida        AS INT FORMAT '9'                            NO-UNDO.
+DEF VAR wopcaodisponiveis      AS INT EXTENT 8 INIT [0, 1, 2, 3, 4, 5, 6, 7]   NO-UNDO. 
+DEF VAR wopcaoescolhida        AS INT FORMAT '9'                               NO-UNDO.
 
 
 FORM SKIP(2)
@@ -9,14 +9,15 @@ FORM SKIP(2)
 '4) Listagem de cidades'                      AT 30 SKIP(1)
 '5) Relatorio de Funcionarios/Dependentes'    AT 30 SKIP(1)
 '6) Listagem de dependentes'                  AT 30 SKIP(1)
+'7) Detalhamento - Funcionario'               AT 30 SKIP(1)
 '0) Sair'                                     AT 30 SKIP(1)
 'Opcao desejada: '                            AT 30
 WITH TITLE 'Construtora - Relatorios' CENTERED
 ROW 5 WIDTH 100.
 
 UPDATE wopcaoescolhida NO-LABELS
-HELP 'Escolha uma das opcoes entre 0 e 6'
-VALIDATE (wopcaoescolhida >= 0 AND wopcaoescolhida <= (EXTENT (wopcaodisponiveis) - 1), 'Escolha uma das opcoes entre 0 e 3').
+HELP 'Escolha uma das opcoes entre 0 e 7'
+VALIDATE (wopcaoescolhida >= 0 AND wopcaoescolhida <= (EXTENT (wopcaodisponiveis) - 1), 'Escolha uma das opcoes entre 0 e 7').
 
 HIDE. 
 CASE wopcaoescolhida:
@@ -27,6 +28,7 @@ CASE wopcaoescolhida:
     WHEN 4 THEN RUN telas/relatorio/relatorio-cidades.p.
     WHEN 5 THEN RUN telas/relatorio/relatorio-funcionario-dependentes.p.
     WHEN 6 THEN RUN telas/relatorio/relatorio-dependentes.p.
+    WHEN 7 THEN RUN telas/relatorio/relatorio-detalhado-funcionario.p.
 END CASE.
 
 
