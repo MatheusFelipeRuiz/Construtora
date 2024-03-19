@@ -1,4 +1,4 @@
-UPDATE 
-    cargo.cargo
-WITH 1 COL TITLE 'Formulario'. 
+FORM
+    cargo.cargo COLUMN-LABEL 'Cargo'
+    WITH FRAME formcargoframe. 
     
