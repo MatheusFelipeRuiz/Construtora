@@ -1,5 +1,5 @@
-DEF VAR wopcaodisponiveis      AS INT EXTENT 7 INIT [0, 1, 2, 3, 4, 5, 6]. 
-DEF VAR wopcaoescolhida        AS INT FORMAT '9'.
+DEF VAR wopcaodisponiveis      AS INT EXTENT 7 INIT [0, 1, 2, 3, 4, 5, 6] NO-UNDO. 
+DEF VAR wopcaoescolhida        AS INT FORMAT '9'                          NO-UNDO.
 
 FORM SKIP(2)
 '1) Cadastrar, Editar ou deletar Funcionario' AT 30 SKIP (1)
@@ -8,11 +8,9 @@ FORM SKIP(2)
 '4) Cadastrar, Editar ou deletar Dependente'  AT 30 SKIP(1)
 '5) Cadastrar, Editar ou deletar Ocupacoes'   AT 30 SKIP(1)
 '6) Relatorios'                               AT 30 SKIP(1)
-'7) Pesquisa por funcionario'                 AT 30 SKIP(1)
 '0) Sair'                                     AT 30 SKIP(2)
 'Opcao desejada: '                            AT 30
-WITH TITLE 'Construtora - Menu Principal' CENTERED
-ROW 5 WIDTH 100.
+WITH TITLE 'Construtora - Menu Principal' CENTERED ROW 5 WIDTH 100.
 
 UPDATE wopcaoescolhida NO-LABELS
 HELP 'Escolha uma das opcoes entre 0 e 6'

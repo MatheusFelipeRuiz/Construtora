@@ -98,47 +98,104 @@
 
 
 
+/*                                                                                    */
+/*FOR EACH funcionario NO-LOCK:                                                       */
+/*    DEF VAR qtdedependentes    AS INT INIT 0.                                       */
+/*    DEF VAR totalsalarioscargo AS DEC INIT 0.                                       */
+/*                                                                                    */
+/*    FIND LAST ocupacao WHERE ocupacao.func_id = funcionario.id NO-ERROR.            */
+/*                                                                                    */
+/*    IF AVAILABLE ocupacao                                                           */
+/*        THEN                                                                        */
+/*    DO:                                                                             */
+/*                                                                                    */
+/*        FOR EACH dependente WHERE funcionario.id = dependente.func_id               */
+/*            BREAK BY funcionario.id:                                                */
+/*            qtdedependentes = qtdedependentes + 1.                                  */
+/*        END.                                                                        */
+/*                                                                                    */
+/*                                                                                    */
+/*                                                                                    */
+/*        FIND cargo WHERE cargo.id = ocupacao.cargo_id NO-ERROR.                     */
+/*        DISP cargo.id                   COLUMN-LABEL 'Cod.Cargo'                    */
+/*            cargo.cargo                 COLUMN-LABEL 'Cargo'                        */
+/*            funcionario.nome_completo   COLUMN-LABEL 'Nome'                         */
+/*            ocupacao.salario            COLUMN-LABEL 'Salario'                      */
+/*            qtdedependentes             COLUMN-LABEL 'Dependentes'                  */
+/*            WITH WIDTH 120.                                                         */
+/*                                                                                    */
+/*        ASSIGN                                                                      */
+/*            qtdedependentes = 0.                                                    */
+/*                                                                                    */
+/*    END.                                                                            */
+/*END.                                                                                */
+/*                                                                                    */
+/*                                                                                    */
+/*                                                                                    */
+/*FOR EACH ocupacao NO-LOCK WHERE ocupacao.data_final = ? BREAK BY  ocupacao.cargo_id:*/
+/*                                                                                    */
+/*                                                                                    */
+/*    DISP ocupacao.cargo_id COLUMN-LABEL 'Cargo ID'                                  */
+/*         funcionario.nome_completo                                                  */
+/*         ocupacao.salario (TOTAL BY ocupacao.cargo_id).                             */
+/*END.                                                                                */
 
-FOR EACH funcionario NO-LOCK:
-    DEF VAR qtdedependentes    AS INT INIT 0.
-    DEF VAR totalsalarioscargo AS DEC INIT 0.
-    
-    FIND LAST ocupacao WHERE ocupacao.func_id = funcionario.id NO-ERROR.
+/*FOR EACH funcionario NO-LOCK:   */
+/*    DISP funcionario WITH 1 COL.*/
+/*END.                            */
 
-    IF AVAILABLE ocupacao
-        THEN 
-    DO:
+/*CREATE ocupacao.*/
+/*UPDATE ocupacao.*/
 
-        FOR EACH dependente WHERE funcionario.id = dependente.func_id
-            BREAK BY funcionario.id:
-            qtdedependentes = qtdedependentes + 1.
-        END.
+FOR EACH ocupacao NO-LOCK:
+    DISP ocupacao WITH 1 COL.
+END.
 
-    
+/*FOR EACH funcionario NO-LOCK:                                                                    */
+/*    FOR EACH ocupacao WHERE ocupacao.func_id = funcionario.id NO-LOCK BREAK BY ocupacao.cargo_id:*/
+/*        FIND cargo WHERE cargo.id = ocupacao.cargo_id NO-ERROR.                                  */
+/*                                                                                                 */
+/*        DISP                                                                                     */
+/*/*            cargo.id*/                                                                         */
+/*            cargo.cargo                                                                          */
+/*            funcionario.nome_completo                                                            */
+/*            ocupacao.salario (TOTAL BY ocupacao.cargo_id) WITH  WIDTH 120.                       */
+/*    END.                                                                                         */
+/*END.                                                                                             */
 
-        FIND cargo WHERE cargo.id = ocupacao.cargo_id NO-ERROR.
-        DISP cargo.id                   COLUMN-LABEL 'Cod.Cargo'
-            cargo.cargo                 COLUMN-LABEL 'Cargo'
-            funcionario.nome_completo   COLUMN-LABEL 'Nome'
-            ocupacao.salario            COLUMN-LABEL 'Salario'
-            qtdedependentes             COLUMN-LABEL 'Dependentes'
-            WITH WIDTH 120.
 
-        ASSIGN 
-            qtdedependentes = 0.
+
+FORM 
+    cargo.cargo
+    funcionario.nome_completo
+    ocupacao.salario.
+
+
+FOR EACH ocupacao NO-LOCK BREAK BY ocupacao.cargo_id:
+    DEF VAR totalsalarioscargo AS DECIMAL INIT 0 NO-UNDO.
         
-    END.
+    
+    
+    FIND funcionario WHERE funcionario.id = ocupacao.func_id  NO-ERROR.
+    FIND cargo       WHERE cargo.id       = ocupacao.cargo_id NO-ERROR.
+    
+    
+    
+    DISP 
+        funcionario.nome_completo
+        cargo.cargo
+        ocupacao.salario (TOTAL BY ocupacao.cargo_id) WITH WIDTH 120.
 END.
 
 
-
-FOR EACH ocupacao NO-LOCK WHERE ocupacao.data_final = ? BREAK BY  ocupacao.cargo_id:
-    
-    
-    DISP ocupacao.cargo_id COLUMN-LABEL 'Cargo ID'
-         funcionario.nome_completo
-         ocupacao.salario (TOTAL BY ocupacao.cargo_id).
-END.
-
-
-
+/*FOR EACH cargo NO-LOCK:                                                             */
+/*    DISP cargo.cargo.                                                               */
+/*    FOR EACH ocupacao WHERE ocupacao.cargo_id = cargo.id BREAK BY ocupacao.cargo_id:*/
+/*        FIND funcionario WHERE funcionario.id = ocupacao.func_id NO-ERROR.          */
+/*                                                                                    */
+/*        DISP                                                                        */
+/*            funcionario.nome_completo                                               */
+/*            ocupacao.salario (TOTAL BY ocupacao.cargo_id) WITH WIDTH 120.           */
+/*                                                                                    */
+/*    END.                                                                            */
+/*END.                                                                                */
