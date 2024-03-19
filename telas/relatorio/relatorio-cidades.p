@@ -1,7 +1,5 @@
-DEF VAR wvoltarparaomenu AS LOG NO-UNDO.
-
-
-DEF VAR wqtdecidadeslistagem AS INT  NO-UNDO INIT 4.
+DEF VAR wvoltarparaomenu     AS LOG         NO-UNDO.
+DEF VAR wqtdecidadeslistagem AS INT INIT 4  NO-UNDO.
 
 FOR EACH cidade NO-LOCK:
     
@@ -10,7 +8,7 @@ FOR EACH cidade NO-LOCK:
     DISP
         cidade.id
         cidade.cidade
-    WITH wqtdecidadeslistagem DOWN FRAME viewcidadeframe 
+    WITH wqtdecidadeslistagem DOWN FRAME displaycidadeframe 
     TITLE 'Lista de cidades' CENTERED.
 END.
 
