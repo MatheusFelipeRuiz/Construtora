@@ -42,20 +42,21 @@ UPDATE
         HELP 'Digite uma cidade ja cadastrada'
         VALIDATE  (CAN-FIND (FIRST cidade WHERE cidade.id = cidade_id), 'Digite uma cidade ja cadastrada' )
         
- WITH TITLE 'Cadastro Funcionario' CENTERED FRAME cadastrofuncframe WIDTH 110.
+ WITH TITLE 'Cadastro Funcionario' CENTERED FRAME cadastrofuncioarioframe WIDTH 110.
+ 
  
 funcionario.nome_completo = TRIM(funcionario.nome_completo).
 
 
-HIDE FRAME cadastrofuncframe.
+HIDE FRAME cadastrofuncioarioframe.
 
 MESSAGE 'Confirma o cadastro do funcionario?'
 VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE wconfirmaroperacao.
 
-IF wconfirmaroperacao THEN  RUN telas/funcionario/tela-escolha-funcionario.p.
+IF wconfirmaroperacao THEN
+    RUN telas/funcionario/tela-escolha-funcionario.p.
 ELSE DO:
     DELETE funcionario.
-    HIDE.
     RUN telas/funcionario/tela-escolha-funcionario.p.
 END.
 
