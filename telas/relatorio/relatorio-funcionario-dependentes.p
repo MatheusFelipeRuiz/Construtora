@@ -1,28 +1,36 @@
-/*DEFINE BUFFER wfuncionario FOR funcionario.                 */
-/*                                                            */
-/*                                                            */
-/*FORM                                                        */
-/*    cargo.id                        COLUMN-LABEL 'Cod.Cargo'*/
-/*    cargo.cargo                     COLUMN-LABEL 'Cargo'    */
-/*    funcionario.nome_completo       COLUMN-LABEL 'Nome'     */
-/*    ocupacao.salario                COLUMN-LABEL 'Salario'  */
-/*    WITH FRAME formfuncionarioframe.                        */
+FOR EACH funcionario NO-LOCK:
+    DEF VAR qtdedependentes    AS INT INIT 0.
+    DEF VAR totalsalarioscargo AS DEC INIT 0.
+    
+    FIND LAST ocupacao WHERE ocupacao.func_id = funcionario.id NO-ERROR.
+
+    IF AVAILABLE ocupacao
+        THEN 
+    DO:
+
+        FOR EACH dependente WHERE funcionario.id = dependente.func_id
+            BREAK BY funcionario.id:
+            qtdedependentes = qtdedependentes + 1.
+        END.
 
     
-FOR EACH funcionario NO-LOCK:
-    FIND LAST ocupacao WHERE ocupacao.func_id = funcionario.id NO-ERROR.
-    
-    IF AVAILABLE ocupacao
-    THEN DO:
+
         FIND cargo WHERE cargo.id = ocupacao.cargo_id NO-ERROR.
         DISP cargo.id                   COLUMN-LABEL 'Cod.Cargo'
-             cargo.cargo                COLUMN-LABEL 'Cargo'
-             funcionario.nome_completo  COLUMN-LABEL 'Nome'
-             WITH WIDTH 120.
-             
+            cargo.cargo                 COLUMN-LABEL 'Cargo'
+            funcionario.nome_completo   COLUMN-LABEL 'Nome'
+            ocupacao.salario            COLUMN-LABEL 'Salario'
+            qtdedependentes             COLUMN-LABEL 'Dependentes'
+            WITH WIDTH 120.
+
+        ASSIGN 
+            qtdedependentes = 0.
+        
     END.
 END.
 
-FOR EACH employee-teste NO-LOCK:
-    DISPLAY employee-teste.salary (COUNT).
-END.
+
+MESSAGE 'Listagem completada!'
+VIEW-AS ALERT-BOX.
+
+RUN telas/relatorio/tela-escolha-relatorio.p.
