@@ -1,34 +1,34 @@
-DEF VAR wnomecompleto             AS CHAR FORMAT 'x(90)' NO-UNDO.
-DEF VAR wqtderegistrosencontrados AS INT                 NO-UNDO.
-DEF VAR wconfirmaroperacao        AS LOG                 NO-UNDO. 
+DEF VAR wnomecompleto             AS CHAR FORMAT 'x(90)'           NO-UNDO.
+DEF VAR wqtderegistrosencontrados AS INT                           NO-UNDO.
+DEF VAR wconfirmaroperacao        AS LOG                           NO-UNDO. 
 
-DEF VAR wnomecompletooriginal     LIKE funcionario.nome_completo   NO-UNDO.
-DEF VAR wdatanascoriginal         LIKE funcionario.data_nascimento NO-UNDO.
-DEF VAR wcpforiginal              LIKE funcionario.cpf             NO-UNDO.
-DEF VAR wrgoriginal               LIKE funcionario.rg              NO-UNDO.
-DEF VAR wsexooriginal             LIKE funcionario.sexo            NO-UNDO.
-DEF VAR wcidadeoriginal           LIKE funcionario.cidade_id       NO-UNDO.
-DEF VAR wdemitidooriginal         LIKE funcionario.demitido        NO-UNDO.
+DEF VAR wnomecompletoanterior     LIKE funcionario.nome_completo   NO-UNDO.
+DEF VAR wdatanascanterior         LIKE funcionario.data_nascimento NO-UNDO.
+DEF VAR wcpfanterior              LIKE funcionario.cpf             NO-UNDO.
+DEF VAR wrganterior               LIKE funcionario.rg              NO-UNDO.
+DEF VAR wsexoanterior             LIKE funcionario.sexo            NO-UNDO.
+DEF VAR wcidadeanterior           LIKE funcionario.cidade_id       NO-UNDO.
+DEF VAR wdemitidoanterior         LIKE funcionario.demitido        NO-UNDO.
 
 PROMPT-FOR funcionario.id  COLUMN-LABEL 'Identificador do funcionario' 
-WITH FRAME funcionarioframe CENTERED.
+WITH FRAME inputfuncionarioframe CENTERED.
 
 FIND funcionario USING funcionario.id EXCLUSIVE-LOCK NO-ERROR.
 
-HIDE FRAME funcionarioframe.
+HIDE FRAME inputfuncionarioframe.
 
 IF AVAILABLE funcionario
 THEN DO:
     ASSIGN 
-           wnomecompletooriginal = funcionario.nome_completo
-           wdatanascoriginal     = funcionario.data_nascimento
-           wcpforiginal          = funcionario.cpf
-           wrgoriginal           = funcionario.rg
-           wsexooriginal         = funcionario.sexo
-           wcidadeoriginal       = funcionario.cidade_id
-           wdemitidooriginal     = funcionario.demitido.
+           wnomecompletoanterior = funcionario.nome_completo
+           wdatanascanterior     = funcionario.data_nascimento
+           wcpfanterior          = funcionario.cpf
+           wrganterior           = funcionario.rg
+           wsexoanterior         = funcionario.sexo
+           wcidadeanterior       = funcionario.cidade_id
+           wdemitidoanterior     = funcionario.demitido.
            
-    {includes/funcionario/formulario-cadastro-edicao.i &titulo='Edicao'}
+    {includes/funcionario/formulario-cadastro-edicao.i}
 
     UPDATE 
         nome_completo   COLUMN-LABEL 'Nome Completo'
@@ -57,12 +57,12 @@ THEN DO:
         HELP 'Digite uma cidade ja cadastrada'
         VALIDATE  (CAN-FIND (FIRST cidade WHERE cidade.id = cidade_id), 'Digite uma cidade ja cadastrada' )
         
-    WITH TITLE 'Edicao Funcionario' CENTERED FRAME cadastrofuncframe WIDTH 110.
+    WITH TITLE 'Edicao  - Funcionario' CENTERED FRAME edicaofuncionarioframe WIDTH 110.
         
     MESSAGE 'Confirma a edicao do funcionario?'
     VIEW-AS ALERT-BOX BUTTONS YES-NO UPDATE wconfirmaroperacao.
         
-    HIDE FRAME cadastrofuncframe.
+    HIDE FRAME edicaofuncionarioframe.
       
     IF wconfirmaroperacao 
     THEN DO:
@@ -73,13 +73,13 @@ THEN DO:
     ELSE 
     DO:
         ASSIGN 
-        funcionario.nome_completo   = wnomecompletooriginal
-        funcionario.data_nascimento = wdatanascoriginal
-        funcionario.cpf             = wcpforiginal
-        funcionario.rg              = wrgoriginal
-        funcionario.sexo            = wsexooriginal
-        funcionario.cidade_id       = wcidadeoriginal
-        funcionario.demitido        = wdemitidooriginal.
+        funcionario.nome_completo   = wnomecompletoanterior
+        funcionario.data_nascimento = wdatanascanterior
+        funcionario.cpf             = wcpfanterior
+        funcionario.rg              = wrganterior
+        funcionario.sexo            = wsexoanterior
+        funcionario.cidade_id       = wcidadeanterior
+        funcionario.demitido        = wdemitidoanterior.
         
         MESSAGE 'Operacao cancelada!'
         VIEW-AS ALERT-BOX BUTTONS OK.
@@ -87,6 +87,9 @@ THEN DO:
         RUN telas/funcionario/tela-escolha-funcionario.p.
     END.
 END.
-
-MESSAGE 'Nenhum funcionario encontrado com o ID informado'
-VIEW-AS ALERT-BOX. 
+ELSE 
+DO:
+    MESSAGE 'Nenhum funcionario encontrado com o ID informado'
+    VIEW-AS ALERT-BOX.
+END.
+ 
