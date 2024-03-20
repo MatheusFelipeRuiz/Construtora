@@ -1,4 +1,5 @@
 DEF VAR wconfirmaroperacao  AS LOG NO-UNDO.
+DEF VAR wqtdefuncionarios   AS INT NO-UNDO.
 
 PROMPT-FOR cidade.id LABEL 'Identificador cidade' WITH  FRAME inputcidadeframe CENTERED.
 FIND cidade USING cidade.id EXCLUSIVE-LOCK NO-ERROR.
@@ -20,12 +21,39 @@ THEN DO:
     
     HIDE FRAME displaycidadeframe.
     
-    IF wconfirmaroperacao
+    FIND LAST funcionario WHERE funcionario.cidade_id = cidade.id NO-ERROR.
+    
+    IF wconfirmaroperacao AND NOT AVAILABLE funcionario
     THEN DO:
         DELETE cidade.
         MESSAGE 'Cidade deletada com sucesso!'
-        VIEW-AS ALERT-BOX BUTTONS OK.
+        VIEW-AS ALERT-BOX.
         RUN telas/cidade/tela-escolha-cidade.p.
+    END.
+    ELSE IF wconfirmaroperacao AND AVAILABLE funcionario 
+    THEN DO:
+        
+        FOR EACH funcionario NO-LOCK WHERE funcionario.cidade_id = cidade.id:
+            ASSIGN wqtdefuncionarios = wqtdefuncionarios + 1.  
+        END.
+        
+        IF wqtdefuncionarios > 1
+        THEN DO:
+            MESSAGE 
+            'Erro, a cidade tem ' + STRING(wqtdefuncionarios) + ' funcionarios associados.'  SKIP(1)
+            'Por favor, exclua primeiramente todos os funcionarios para deletar essa cidade'        
+            VIEW-AS ALERT-BOX.
+        END.
+        ELSE
+        DO:
+            MESSAGE 
+            'Erro, a cidade tem ' + STRING(wqtdefuncionarios) + ' funcionario associado.'    SKIP(1)
+            'Por favor, exclua primeiramente esse funcionario para deletar essa cidade'        
+            VIEW-AS ALERT-BOX.
+        END.
+        
+        RUN telas/cidade/tela-escolha-cidade.p.
+        
     END.
     ELSE DO:
         MESSAGE 'Operacao cancelada!'
